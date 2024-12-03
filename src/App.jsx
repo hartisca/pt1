@@ -1,14 +1,12 @@
 import { useEffect, useState } from 'react'
 import './App.css'
 
-function App() {
-  const [ fact, setFact ] = useState('')
+function App() {  
   const [ img, setImg ] = useState('')
   
   useEffect(() => {
     const fetchData = async () => {
-      await fetchFact()
-      await fetchImg()
+      await fetchFact()      
     }
     fetchData()
   }, [])
@@ -17,25 +15,17 @@ function App() {
     try{
       const respuesta = await fetch('https://catfact.ninja/fact')
       const data = await respuesta.json()
-      const fact2 = data.fact.split(" ")
-      setFact(fact2[0])
+      const threeWords = data.fact.split(" ", 3).join(' ')    
+
+      const image = await fetch(`https://cataas.com/cat/says/${threeWords}?fontSize=35&fontColor=red`)
+      setImg(image.url)
     } catch (error){
       console.log(error)
     }      
   }
-
-  const fetchImg = async () => {
-    try{
-      const respuesta = await fetch('https://cataas.com/cat/says/hello')      
-      setImg(respuesta.url)      
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
+  
   return (
-    <>
-      <h1>{fact}</h1>
+    <>      
       <img src={img} alt="" />
     </>
   )
